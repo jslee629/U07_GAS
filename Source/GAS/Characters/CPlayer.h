@@ -6,6 +6,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UCInteractionComponent;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -25,6 +26,9 @@ protected:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 
+	void PrimaryAction();
+	void PrimaryInteraction();
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USpringArmComponent* SpringArmComp;
@@ -32,4 +36,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCameraComponent* CameraComp;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCInteractionComponent* InteractionComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	TSubclassOf<AActor> MagicBallClass;
 };
