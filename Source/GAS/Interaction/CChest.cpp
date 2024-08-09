@@ -20,7 +20,7 @@ void ACChest::BeginPlay()
 	
 }
 
-void ACChest::Interaction_Implementation(APawn* InstigatorPawn)
+void ACChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	LidMesh->SetRelativeRotation(FRotator(MaxPitch, 0, 0));
 }

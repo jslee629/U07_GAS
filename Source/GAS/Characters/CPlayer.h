@@ -7,6 +7,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UCInteractionComponent;
+class UAnimMontage;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -27,6 +28,7 @@ protected:
 	void MoveRight(float AxisValue);
 
 	void PrimaryAction();
+	void PrimaryAction_TimeElapsed();
 	void PrimaryInteraction();
 
 protected:
@@ -41,4 +43,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	TSubclassOf<AActor> MagicBallClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Action")
+	float AttackDelay;
+
+private:
+	FTimerHandle TimerHandle_PrimaryAction;
 };

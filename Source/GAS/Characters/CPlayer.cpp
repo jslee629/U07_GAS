@@ -6,6 +6,9 @@
 
 ACPlayer::ACPlayer()
 {
+	//initialize variables
+	AttackDelay = 0.2f;
+
 	//Create Scene Component
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	SpringArmComp->SetupAttachment(RootComponent);
@@ -66,10 +69,22 @@ void ACPlayer::MoveRight(float AxisValue)
 
 void ACPlayer::PrimaryAction()
 {
+	if (AttackMontage)
+	{
+		PlayAnimMontage(AttackMontage);
+	}
+
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAction, this, &ACPlayer::PrimaryAction_TimeElapsed, AttackDelay);
+}
+
+void ACPlayer::PrimaryAction_TimeElapsed()
+{
 	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	FTransform SpawnTM(GetControlRotation(), HandLocation);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+
 	if (ensure(MagicBallClass))
 	{
 		GetWorld()->SpawnActor<AActor>(MagicBallClass, SpawnTM, SpawnParams);

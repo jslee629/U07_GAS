@@ -19,16 +19,16 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	void Interaction_Implementation(APawn* InstigatorPawn);
+	void Interact_Implementation(APawn* InstigatorPawn) override;
 
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float MaxPitch;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* BaseMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* LidMesh;
 };
