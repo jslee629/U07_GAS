@@ -3,6 +3,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CInteractionComponent.h"
+#include "Components/CAttributeComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -19,6 +20,7 @@ ACPlayer::ACPlayer()
 
 	//Create Actor Component
 	InteractionComp = CreateDefaultSubobject<UCInteractionComponent>(TEXT("InteractionComp"));
+	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>(TEXT("AttributeComp"));
 
 	//Character Movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -79,14 +81,15 @@ void ACPlayer::PrimaryAction()
 
 void ACPlayer::PrimaryAction_TimeElapsed()
 {
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	FTransform SpawnTM(GetControlRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-
 	if (ensure(MagicBallClass))
 	{
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		FTransform SpawnTM(GetControlRotation(), HandLocation);
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+
 		GetWorld()->SpawnActor<AActor>(MagicBallClass, SpawnTM, SpawnParams);
 	}
 }

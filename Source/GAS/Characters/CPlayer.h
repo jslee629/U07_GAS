@@ -8,6 +8,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UCInteractionComponent;
 class UAnimMontage;
+class UCAttributeComponent;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -40,6 +41,9 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCInteractionComponent* InteractionComp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UCAttributeComponent* AttributeComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	TSubclassOf<AActor> MagicBallClass;
