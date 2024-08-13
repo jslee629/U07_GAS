@@ -48,7 +48,10 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACharacter::StopJumping);
 	InputComponent->BindAction("PrimaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::PrimaryAction);
 	InputComponent->BindAction("PrimaryInteraction", EInputEvent::IE_Pressed, this, &ACPlayer::PrimaryInteraction);
-
+	InputComponent->BindAction("SecondaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::SecondaryAction);
+	InputComponent->BindAction("SecondaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::SecondaryAction);
+	InputComponent->BindAction("TertiaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::TertiaryAction);
+	InputComponent->BindAction("TertiaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::TertiaryAction);
 }
 
 void ACPlayer::MoveForward(float AxisValue)
@@ -81,17 +84,38 @@ void ACPlayer::PrimaryAction()
 
 void ACPlayer::PrimaryAction_TimeElapsed()
 {
-	if (ensure(MagicBallClass))
+	
+	SpawnProjectile(MagicBallClass);
+}
+
+void ACPlayer::SecondaryAction()
+{
+	if (AttackMontage)
 	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-		FTransform SpawnTM(GetControlRotation(), HandLocation);
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = this;
-
-		GetWorld()->SpawnActor<AActor>(MagicBallClass, SpawnTM, SpawnParams);
+		PlayAnimMontage(AttackMontage);
 	}
+
+	GetWorldTimerManager().SetTimer(TimerHandle_SecondaryAction, this, &ACPlayer::SecondaryAction_TimeElapsed, AttackDelay);
+}
+
+void ACPlayer::SecondaryAction_TimeElapsed()
+{
+	SpawnProjectile(WarpBallClass);
+}
+
+void ACPlayer::TertiaryAction()
+{
+	if (AttackMontage)
+	{
+		PlayAnimMontage(AttackMontage);
+	}
+
+	GetWorldTimerManager().SetTimer(TimerHandle_TertiaryAction, this, &ACPlayer::TertiaryAction_TimeElapsed, AttackDelay);
+}
+
+void ACPlayer::TertiaryAction_TimeElapsed()
+{
+	SpawnProjectile(BlackHoleClass);
 }
 
 void ACPlayer::PrimaryInteraction()
@@ -99,6 +123,45 @@ void ACPlayer::PrimaryInteraction()
 	if (InteractionComp)
 	{
 		InteractionComp->PrimaryInteraction();
+	}
+}
+
+void ACPlayer::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
+{
+	if (ensure(ClassToSpawn))
+	{
+		//Camera Trace
+		FHitResult Hit;
+
+		FVector TraceStart = CameraComp->GetComponentLocation();
+		FVector TraceEnd = TraceStart + (GetControlRotation().Vector() * 5000.f);
+
+		FCollisionObjectQueryParams ObjectQueries;
+		ObjectQueries.AddObjectTypesToQuery(ECC_WorldDynamic);
+		ObjectQueries.AddObjectTypesToQuery(ECC_WorldStatic);
+		ObjectQueries.AddObjectTypesToQuery(ECC_Pawn);
+
+		FCollisionShape Shape;
+		Shape.SetSphere(20.f);
+
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+
+		if (GetWorld()->SweepSingleByObjectType(Hit, TraceStart, TraceEnd, FQuat::Identity, ObjectQueries, Shape, QueryParams))
+		{
+			TraceEnd = Hit.ImpactPoint;
+		}
+
+		//Spawn Projectile
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		FRotator ProjectileRotation = FRotationMatrix::MakeFromX(TraceEnd - HandLocation).Rotator();
+		FTransform SpawnTM(ProjectileRotation, HandLocation);
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+
+		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
 	}
 }
 

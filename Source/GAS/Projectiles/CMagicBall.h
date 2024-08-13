@@ -1,15 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "CProjectileBase.h"
 #include "CMagicBall.generated.h"
 
-class USphereComponent;
-class UParticleSystemComponent;
-class UProjectileMovementComponent;
-
 UCLASS()
-class GAS_API ACMagicBall : public AActor
+class GAS_API ACMagicBall : public ACProjectileBase
 {
 	GENERATED_BODY()
 	
@@ -22,11 +18,7 @@ protected:
 	UFUNCTION()
 	virtual void OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:	
-	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
-	USphereComponent* SphereComp;
-	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
-	UParticleSystemComponent* EffectComp;
-	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
-	UProjectileMovementComponent* MoveComp;
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float DamageAmount;
 };
