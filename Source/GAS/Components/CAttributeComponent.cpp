@@ -3,7 +3,8 @@
 UCAttributeComponent::UCAttributeComponent()
 {
 	//initialize variables
-	Health = 100.f;
+	MaxHealth = 100.f;
+	Health = MaxHealth;
 }
 
 
@@ -17,6 +18,8 @@ void UCAttributeComponent::BeginPlay()
 bool UCAttributeComponent::ApplyHealthChange(float Delta)
 {
 	Health += Delta;
+
+	Health = FMath::Clamp(Health, 0.f, MaxHealth);
 
 	if (OnHealthChanged.IsBound())
 	{

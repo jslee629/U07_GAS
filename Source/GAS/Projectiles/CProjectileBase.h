@@ -8,6 +8,8 @@ class UParticleSystem;
 class USphereComponent;
 class UParticleSystemComponent;
 class UProjectileMovementComponent;
+class UAudioComponent;
+class USoundCue;
 
 UCLASS(Abstract)
 class GAS_API ACProjectileBase : public AActor
@@ -29,11 +31,15 @@ protected:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UParticleSystem* ImpactVFX;
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	USoundCue* ImpactSound;
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	USphereComponent* SphereComp;
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UParticleSystemComponent*  EffectComp;
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UAudioComponent* AudioComp;
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UProjectileMovementComponent* MoveComp;
 
