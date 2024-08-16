@@ -6,14 +6,9 @@ void ACAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ensure(BehaviorTree);
-	RunBehaviorTree(BehaviorTree);
-
-	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-
-	if (PlayerPawn)
+	if (ensure(BehaviorTree))
 	{
-		GetBlackboardComponent()->SetValueAsObject("TargetActor", PlayerPawn);
+		RunBehaviorTree(BehaviorTree);
 	}
 }
 
