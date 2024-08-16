@@ -9,6 +9,7 @@ class UCameraComponent;
 class UCInteractionComponent;
 class UAnimMontage;
 class UCAttributeComponent;
+class MaterialInstanceDynamic;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -21,7 +22,7 @@ public:
 protected:
 	virtual void PostInitializeComponents() override;
 
-public:	
+public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()

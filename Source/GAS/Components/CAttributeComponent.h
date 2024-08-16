@@ -23,7 +23,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	bool IsAlive() const;
 
-protected:
+public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")
 	float Health;
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")

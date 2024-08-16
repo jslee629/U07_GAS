@@ -23,11 +23,11 @@ void UCInteractionComponent::PrimaryInteraction()
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
 	FVector EyeLocation;
-	FRotator EyeRoation;
-	OwnerActor->GetActorEyesViewPoint(EyeLocation, EyeRoation);
+	FRotator EyeRotation;
+	OwnerActor->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
 	FVector Start = EyeLocation;
-	FVector End = EyeLocation + (EyeRoation.Vector() * 1000.f);
+	FVector End = EyeLocation + (EyeRotation.Vector() * 1000.f);
 
 	TArray<FHitResult> Hits;
 

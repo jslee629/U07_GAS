@@ -1,7 +1,8 @@
-#include "CPotion.h"
+﻿#include "CPotion.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 ACPotion::ACPotion()
 {
@@ -23,20 +24,35 @@ void ACPotion::Interact_Implementation(APawn* InstigatorPawn)
 {
 	if (bCanUse)
 	{
-		bCanUse = false;
-
 		UCAttributeComponent* AttributeComp = Cast<UCAttributeComponent>(InstigatorPawn->GetComponentByClass(UCAttributeComponent::StaticClass()));
 		if (AttributeComp)
 		{
-			AttributeComp->ApplyHealthChange(100.f);
-			GetWorldTimerManager().SetTimer(TimerHandle_ReturnToUse, this, &ACPotion::ReturnToUse, Cooltime, false);
+			if (AttributeComp->Health < AttributeComp->MaxHealth)
+			{
+				bCanUse = false;
+
+				AttributeComp->ApplyHealthChange(100.f);
+				GetWorldTimerManager().SetTimer(TimerHandle_ReturnToUse, this, &ACPotion::ReturnToUse, Cooltime, false);
+				DrawDebugString(GetWorld(), GetActorLocation(), TEXT("꿀꺽"), 0, FColor::White, 1.f, true, 4.f);
+				MeshComp->SetScalarParameterValueOnMaterials("bCanUse", 0.1f);
+			}
+			else
+			{
+				DrawDebugString(GetWorld(), GetActorLocation(), TEXT("있었는데요"), 0, FColor::White, 1.f, true, 4.f);
+			}
 		}
+	}
+	else
+	{
+		DrawDebugString(GetWorld(), GetActorLocation(), TEXT("없어졌습니다"), 0, FColor::White, 1.f, true, 4.f);
 	}
 }
 
 void ACPotion::ReturnToUse_Implementation()
 {
 	bCanUse = true;
+	DrawDebugString(GetWorld(), GetActorLocation(), TEXT("다시 있네요^^"), 0, FColor::White, 1.f, true, 4.f);
+	MeshComp->SetScalarParameterValueOnMaterials("bCanUse", 1.f);
 }
 
 

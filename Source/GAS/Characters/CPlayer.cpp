@@ -4,6 +4,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CInteractionComponent.h"
 #include "Components/CAttributeComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 ACPlayer::ACPlayer()
 {
@@ -174,4 +176,3 @@ void ACPlayer::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
 	}
 }
-
