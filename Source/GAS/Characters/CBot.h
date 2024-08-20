@@ -5,6 +5,7 @@
 #include "CBot.generated.h"
 
 class UPawnSensingComponent;
+class UCAttributeComponent;
 
 UCLASS()
 class GAS_API ACBot : public ACharacter
@@ -24,4 +25,7 @@ private:
 protected:	
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UPawnSensingComponent* PawnSensingComp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UCAttributeComponent* AttributeComp;
 };
