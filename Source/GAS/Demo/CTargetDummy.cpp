@@ -6,7 +6,7 @@ ACTargetDummy::ACTargetDummy()
 {
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	RootComponent = MeshComp;
-	
+
 	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>("AttributeComp");
 }
 
@@ -19,8 +19,10 @@ void ACTargetDummy::BeginPlay()
 
 void ACTargetDummy::OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	if (Delta < 0)
+	if (Delta < 0.f)
 	{
-		MeshComp->SetScalarParameterValueOnMaterials(TEXT("TimeToHit"), GetWorld()->TimeSeconds);
+		MeshComp->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
 	}
 }
+
+

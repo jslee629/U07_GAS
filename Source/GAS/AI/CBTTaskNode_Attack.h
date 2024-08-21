@@ -15,4 +15,5 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, Category = "AI")
 	TSubclassOf<AActor> ProjectileClass;
+	
 };

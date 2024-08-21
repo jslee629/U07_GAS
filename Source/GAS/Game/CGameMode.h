@@ -6,7 +6,6 @@
 #include "CGameMode.generated.h"
 
 class UEnvQuery;
-class UCurveFloat;
 
 UCLASS()
 class GAS_API ACGameMode : public AGameModeBase
@@ -19,20 +18,21 @@ public:
 protected:
 	virtual void StartPlay() override;
 
-	UFUNCTION()
-	void SpawnBotTimerElapsed();
-
-	UFUNCTION()
-	void OnQueryFinished(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
-
+	//Spawn Bots
 protected:
 	FTimerHandle TimerHandle_SpawnBots;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	float SpawnTimerDelay;
 
+	UFUNCTION()
+	void SpawnBotTimerElapsed();
+
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
-	UEnvQuery* SpawnBotsQuery;
+	UEnvQuery* SpawnBotQuery;
+
+	UFUNCTION()
+	void OnQueryFinished(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	TSubclassOf<AActor> BotClass;

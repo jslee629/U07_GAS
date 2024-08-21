@@ -17,19 +17,27 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	bool ApplyHealthChange(float Delta);
+
 	UFUNCTION(BlueprintCallable, Category = "Attributes")
 	bool IsAlive() const;
 
-public:
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")
-	float Health;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")
-	float MaxHealth;
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	bool IsFullHealth() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Attributes")
+	float GetMaxHealth() const;
 
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")
+	float Health;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Attributes")
+	float MaxHealth;
 };

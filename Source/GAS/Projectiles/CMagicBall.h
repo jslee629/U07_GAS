@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
 #include "CProjectileBase.h"
 #include "CMagicBall.generated.h"
 
@@ -15,10 +16,11 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+protected:
 	UFUNCTION()
-	virtual void OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:
+protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float DamageAmount;
 };

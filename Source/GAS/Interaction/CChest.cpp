@@ -3,15 +3,13 @@
 
 ACChest::ACChest()
 {
-	//initialize variables
-	MaxPitch = 110.f;
-
-	//Create Components
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMesh");
 	RootComponent = BaseMesh;
 
 	LidMesh = CreateDefaultSubobject<UStaticMeshComponent>("LidMesh");
 	LidMesh->SetupAttachment(BaseMesh);
+
+	MaxPitch = 110.f;
 }
 
 void ACChest::BeginPlay()
@@ -24,5 +22,3 @@ void ACChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	LidMesh->SetRelativeRotation(FRotator(MaxPitch, 0, 0));
 }
-
-

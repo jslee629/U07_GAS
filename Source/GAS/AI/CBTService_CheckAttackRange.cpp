@@ -10,7 +10,7 @@ void UCBTService_CheckAttackRange::TickNode(UBehaviorTreeComponent& OwnerComp, u
 	if (ensure(BB))
 	{
 		AActor* TargetActor = Cast<AActor>(BB->GetValueAsObject("TargetActor"));
-		if (ensure(TargetActor))
+		if (TargetActor)
 		{
 			AAIController* AIC = OwnerComp.GetAIOwner();
 			if (ensure(AIC))
@@ -32,4 +32,7 @@ void UCBTService_CheckAttackRange::TickNode(UBehaviorTreeComponent& OwnerComp, u
 			}
 		}
 	}
+
+
+	
 }

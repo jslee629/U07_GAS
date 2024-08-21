@@ -3,6 +3,7 @@
 #include "EngineUtils.h"
 #include "Characters/CBot.h"
 #include "Components/CAttributeComponent.h"
+#include "DrawDebugHelpers.h"
 
 ACGameMode::ACGameMode()
 {
@@ -18,7 +19,32 @@ void ACGameMode::StartPlay()
 
 void ACGameMode::SpawnBotTimerElapsed()
 {
-	UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, SpawnBotsQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr);
+	int32 NrOfAliveBots = 0;
+	for (TActorIterator<ACBot> It(GetWorld()); It; ++It)
+	{
+		ACBot* Bot = *It;
+
+		UCAttributeComponent* AttributeComp = Cast<UCAttributeComponent>(Bot->GetComponentByClass(UCAttributeComponent::StaticClass()));
+		if (ensure(AttributeComp) && AttributeComp->IsAlive())
+		{
+			NrOfAliveBots++;
+		}
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("Found %i bots alive"), NrOfAliveBots);
+
+	float MaxBotCount = 10.f;
+	if (SpawnCurve)
+	{
+		MaxBotCount = SpawnCurve->GetFloatValue(GetWorld()->TimeSeconds);
+	}
+	if (NrOfAliveBots >= (int32)MaxBotCount)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Reached Maximum bot count. Skipping bot spawns"));
+		return;
+	}
+
+	UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, SpawnBotQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr);
 	if (ensure(QueryInstance))
 	{
 		QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ACGameMode::OnQueryFinished);
@@ -29,42 +55,21 @@ void ACGameMode::OnQueryFinished(UEnvQueryInstanceBlueprintWrapper* QueryInstanc
 {
 	if (QueryStatus != EEnvQueryStatus::Success)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Spawn bots EQS query failed!"));
+		UE_LOG(LogTemp, Error, TEXT("Spawn bot EQS query failed!"));
 		return;
 	}
 
-	//count bots
-	int32 NrOfAliveBots = 0;
-	for (TActorIterator<ACBot> It(GetWorld()); It; ++It)
-	{
-		ACBot* Bot = *It;
-
-		UCAttributeComponent* AttributeComp = Cast<UCAttributeComponent>(Bot->GetComponentByClass(UCAttributeComponent::StaticClass()));
-		if (ensure(AttributeComp) && AttributeComp->IsAlive())
-		{
-			NrOfAliveBots += 1;
-		}
-	}
-
-	float MaxBotCount = 10.f;
-	if (SpawnCurve)
-	{
-		MaxBotCount = SpawnCurve->GetFloatValue(GetWorld()->GetTimeSeconds());
-	}
-	if (NrOfAliveBots >= (int32)MaxBotCount)
-	{
-		return;
-	}
-
-	//start Spawn bots
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 	if (Locations.IsValidIndex(0))
 	{
 		if (!ensure(BotClass))
 		{
-			UE_LOG(LogTemp, Error, TEXT("Bot Class Ref is not set!"));
+			UE_LOG(LogTemp, Error, TEXT("Bot Class Ref is not set"));
 			return;
 		}
+
 		GetWorld()->SpawnActor<AActor>(BotClass, Locations[0], FRotator::ZeroRotator);
+		
+		DrawDebugSphere(GetWorld(), Locations[0], 50.f, 20, FColor::Blue, false, 60.f);
 	}
 }

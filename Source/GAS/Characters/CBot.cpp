@@ -7,7 +7,7 @@
 
 ACBot::ACBot()
 {
-	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
+	PawnSesningComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSesningComp");
 	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>("AttributeComp");
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -16,8 +16,8 @@ ACBot::ACBot()
 void ACBot::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-
-	PawnSensingComp->OnSeePawn.AddDynamic(this, &ACBot::OnSeePawn);
+	
+	PawnSesningComp->OnSeePawn.AddDynamic(this, &ACBot::OnSeePawn);
 }
 
 void ACBot::OnSeePawn(APawn* Pawn)
@@ -31,4 +31,3 @@ void ACBot::OnSeePawn(APawn* Pawn)
 		DrawDebugString(GetWorld(), GetActorLocation(), "I found you!!", nullptr, FColor::White, 3.f, true);
 	}
 }
-

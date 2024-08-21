@@ -4,14 +4,14 @@
 
 ACMagicBall::ACMagicBall()
 {
-	SphereComp->SetSphereRadius(20.f);
+	SphereComp->SetSphereRadius(20);
 	DamageAmount = 20.f;
 }
 
 void ACMagicBall::BeginPlay()
 {
 	SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ACMagicBall::OnActorOverlap);
-	
+
 	Super::BeginPlay();
 }
 
@@ -19,13 +19,12 @@ void ACMagicBall::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor && OtherActor != GetInstigator())
 	{
-		UCAttributeComponent* AttributueComp = Cast<UCAttributeComponent>(OtherActor->GetComponentByClass(UCAttributeComponent::StaticClass()));
-		if (AttributueComp)
+		UCAttributeComponent* AttributeComp = Cast<UCAttributeComponent>(OtherActor->GetComponentByClass(UCAttributeComponent::StaticClass()));
+		if (AttributeComp)
 		{
-			AttributueComp->ApplyHealthChange(-DamageAmount);
+			AttributeComp->ApplyHealthChange(-DamageAmount);
 
 			Explode();
 		}
 	}
 }
-

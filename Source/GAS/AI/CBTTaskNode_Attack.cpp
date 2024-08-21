@@ -23,17 +23,18 @@ EBTNodeResult::Type UCBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Own
 			if (TargetActor)
 			{
 				FVector MuzzleLocation = BotCharacter->GetMesh()->GetSocketLocation("Muzzle_Front");
-
 				FVector Direction = TargetActor->GetActorLocation() - MuzzleLocation;
+
 				FRotator RotationToTargetActor = Direction.Rotation();
 
 				FActorSpawnParameters Params;
 				Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
+				
 				AActor* NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, MuzzleLocation, RotationToTargetActor, Params);
-				return NewProjectile ? EBTNodeResult::Succeeded : EBTNodeResult::Failed;
+				return NewProjectile ? (EBTNodeResult::Succeeded) : (EBTNodeResult::Failed);
 			}
 		}
+		
 	}
 
 	return EBTNodeResult::Failed;

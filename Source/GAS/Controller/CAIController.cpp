@@ -6,9 +6,8 @@ void ACAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (ensure(BehaviorTree))
+	if (ensureMsgf(BehaviorTree, TEXT("BTAsset is not set. Please assign BTAsset in AIController")))
 	{
 		RunBehaviorTree(BehaviorTree);
 	}
 }
-

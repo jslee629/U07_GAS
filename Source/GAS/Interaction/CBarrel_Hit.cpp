@@ -5,16 +5,15 @@
 
 ACBarrel_Hit::ACBarrel_Hit()
 {
-	//Create Components
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	MeshComp->SetSimulatePhysics(true);
 	RootComponent = MeshComp;
 
 	ForceComp = CreateDefaultSubobject<URadialForceComponent>("ForceComp");
 	ForceComp->SetupAttachment(MeshComp);
-	ForceComp->Radius = 250.f;
 	ForceComp->SetAutoActivate(false);
-	ForceComp->ImpulseStrength = 200000.f;
+	ForceComp->Radius = 1000.f;
+	ForceComp->ImpulseStrength = 2000;
 	ForceComp->bImpulseVelChange = true;
 	ForceComp->AddCollisionChannelToAffect(ECC_WorldDynamic);
 	ForceComp->AddCollisionChannelToAffect(ECC_Pawn);
@@ -23,7 +22,7 @@ ACBarrel_Hit::ACBarrel_Hit()
 void ACBarrel_Hit::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
-	
+
 	MeshComp->OnComponentHit.AddDynamic(this, &ACBarrel_Hit::OnActorHit);
 }
 

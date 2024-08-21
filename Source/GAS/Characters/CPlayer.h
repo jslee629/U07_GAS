@@ -9,7 +9,7 @@ class UCameraComponent;
 class UCInteractionComponent;
 class UAnimMontage;
 class UCAttributeComponent;
-class MaterialInstanceDynamic;
+class UParticleSystem;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -21,16 +21,15 @@ public:
 
 protected:
 	virtual void PostInitializeComponents() override;
-
-public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* OwningComp, float NewHealth, float Delta);
 
 protected:
-	void MoveForward(float AxisValue);
-	void MoveRight(float AxisValue);
+	void MoveForward(float Value);
+	void MoveRight(float Value);
 
 	void PrimaryAction();
 	void PrimaryAction_TimeElapsed();
@@ -38,12 +37,13 @@ protected:
 	void SecondaryAction();
 	void SecondaryAction_TimeElapsed();
 
-	void TertiaryAction();
-	void TertiaryAction_TimeElapsed();
+	void ThirdAction();
+	void ThirdAction_TimeElapsed();
+
+	void PlayAttackAction();
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 
 	void PrimaryInteraction();
-
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -58,21 +58,34 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent* AttributeComp;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
+protected:
+	UPROPERTY(EditAnywhere, Category = "Action")
+	float AttackDelay;
+
+	UPROPERTY(EditAnywhere, Category = "Action")
 	TSubclassOf<AActor> MagicBallClass;
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
+
+	UPROPERTY(EditAnywhere, Category = "Action")
 	TSubclassOf<AActor> WarpBallClass;
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
+
+	UPROPERTY(EditAnywhere, Category = "Action")
 	TSubclassOf<AActor> BlackHoleClass;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	UPROPERTY(EditAnywhere, Category = "Action")
 	UAnimMontage* AttackMontage;
 
 	UPROPERTY(EditAnywhere, Category = "Action")
-	float AttackDelay;
+	UParticleSystem* MuzzleParticle;
+
+	UPROPERTY(EditAnywhere, Category = "Action")
+	FName HandSocketName;
+		
+	UPROPERTY(EditAnywhere, Category = "Action")
+	FName TimeToHitParamName;
 
 private:
 	FTimerHandle TimerHandle_PrimaryAction;
 	FTimerHandle TimerHandle_SecondaryAction;
-	FTimerHandle TimerHandle_TertiaryAction;
+	FTimerHandle TimerHandle_ThirdAction;
+
 };

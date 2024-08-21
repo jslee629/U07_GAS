@@ -15,6 +15,7 @@ class GAS_API ACBot : public ACharacter
 public:
 	ACBot();
 
+
 protected:
 	virtual void PostInitializeComponents() override;
 
@@ -22,10 +23,11 @@ private:
 	UFUNCTION()
 	void OnSeePawn(APawn* Pawn);
 
-protected:	
+protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UPawnSensingComponent* PawnSensingComp;
+	UPawnSensingComponent* PawnSesningComp;
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent* AttributeComp;
+
 };

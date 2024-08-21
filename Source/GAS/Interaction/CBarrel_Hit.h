@@ -23,11 +23,14 @@ private:
 	UFUNCTION()
 	void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-protected:	
+protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* MeshComp;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	URadialForceComponent* ForceComp;
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+
+	UPROPERTY(EditAnywhere)
 	UParticleSystem* Explosion;
+
 };

@@ -18,12 +18,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+protected:
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, class UCAttributeComponent* OwningComp, float NewHealth, float Delta);
 
-protected:	
+protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* MeshComp;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent* AttributeComp;
 };

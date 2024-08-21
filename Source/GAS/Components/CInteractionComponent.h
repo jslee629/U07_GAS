@@ -15,8 +15,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
-public:	
-	void PrimaryInteraction();
 		
+public:
+	void PrimaryInteraction();
 };
