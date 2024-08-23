@@ -70,6 +70,11 @@ float UCAttributeComponent::GetMaxHealth() const
 	return MaxHealth;
 }
 
+float UCAttributeComponent::GetHealth() const
+{
+	return Health;
+}
+
 bool UCAttributeComponent::Kill(AActor* InstigatorActor)
 {
 	return ApplyHealthChange(InstigatorActor, -GetMaxHealth());
