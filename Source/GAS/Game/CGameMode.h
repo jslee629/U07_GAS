@@ -18,8 +18,15 @@ public:
 protected:
 	virtual void StartPlay() override;
 
+	//Kill
+public:
 	UFUNCTION(Exec)
 	void KillAll();
+
+	virtual void OnActorKilled(AActor* VictimActor, AActor* Killer);
+
+	UFUNCTION()
+	void RespawnPlayerElapsed(AController* Controller);
 
 	//Spawn Bots
 protected:

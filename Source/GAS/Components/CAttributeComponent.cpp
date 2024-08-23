@@ -1,4 +1,5 @@
 #include "CAttributeComponent.h"
+#include "Game/CGameMode.h"
 
 UCAttributeComponent::UCAttributeComponent()
 {
@@ -45,14 +46,23 @@ bool UCAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	float PrevHealth = Health;
 	Health = FMath::Clamp(Health += Delta, 0.f, MaxHealth);
 
-	float ActualDelath = Health - PrevHealth;
+	float ActualDelta = Health - PrevHealth;
 
 	if (OnHealthChanged.IsBound())
 	{
-		OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelath);
+		OnHealthChanged.Broadcast(InstigatorActor, this, Health, ActualDelta);
 	}
 
-	return !FMath::IsNearlyZero(ActualDelath);
+	if (ActualDelta < 0.f && Health <= 0.f)
+	{
+		ACGameMode* GM = GetWorld()->GetAuthGameMode<ACGameMode>();
+		if (GM)
+		{
+			GM->OnActorKilled(GetOwner(), InstigatorActor);
+		}
+	}
+
+	return !FMath::IsNearlyZero(ActualDelta);
 }
 
 bool UCAttributeComponent::IsAlive() const
