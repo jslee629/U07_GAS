@@ -37,6 +37,11 @@ bool UCAttributeComponent::IsActorAlive(AActor* Actor)
 
 bool UCAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delta)
 {
+	if (!GetOwner()->CanBeDamaged() && Delta < 0.f)
+	{
+		return false;
+	}
+
 	float PrevHealth = Health;
 	Health = FMath::Clamp(Health += Delta, 0.f, MaxHealth);
 
@@ -63,4 +68,9 @@ bool UCAttributeComponent::IsFullHealth() const
 float UCAttributeComponent::GetMaxHealth() const
 {
 	return MaxHealth;
+}
+
+bool UCAttributeComponent::Kill(AActor* InstigatorActor)
+{
+	return ApplyHealthChange(InstigatorActor, -GetMaxHealth());
 }

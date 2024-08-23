@@ -18,7 +18,6 @@ public:
 protected:
 	virtual void StartPlay() override;
 
-	//Todo.
 	UFUNCTION(Exec)
 	void KillAll();
 

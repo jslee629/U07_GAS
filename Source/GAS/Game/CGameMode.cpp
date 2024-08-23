@@ -73,3 +73,17 @@ void ACGameMode::OnQueryFinished(UEnvQueryInstanceBlueprintWrapper* QueryInstanc
 		DrawDebugSphere(GetWorld(), Locations[0], 50.f, 20, FColor::Blue, false, 60.f);
 	}
 }
+
+void ACGameMode::KillAll()
+{
+	for (TActorIterator<ACBot> It(GetWorld()); It; ++It)
+	{
+		ACBot* Bot = *It;
+
+		UCAttributeComponent* AttributeComp = UCAttributeComponent::GetAttributes(Bot);
+		if (ensure(AttributeComp) && AttributeComp->IsAlive())
+		{
+			AttributeComp->Kill(this);
+		}
+	}
+}

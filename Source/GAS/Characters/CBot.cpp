@@ -47,16 +47,6 @@ void ACBot::OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* Ownin
 
 		GetMesh()->SetScalarParameterValueOnMaterials(TimeToHitParamName, GetWorld()->TimeSeconds);
 
-		if (HealthBarWidget == nullptr)
-		{
-			HealthBarWidget = CreateWidget<UCWorldWidget>(GetWorld(), HealthBarWidgetClass);
-			if (HealthBarWidget)
-			{
-				HealthBarWidget->AttachToActor = this;
-				HealthBarWidget->AddToViewport();
-			}
-		}
-
 		if (NewHealth <= 0.f)
 		{
 			AAIController* AIC = GetController<AAIController>();
@@ -69,6 +59,17 @@ void ACBot::OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* Ownin
 			GetMesh()->SetCollisionProfileName("Ragdoll");
 
 			SetLifeSpan(10.f);
+			return;
+		}
+
+		if (HealthBarWidget == nullptr)
+		{
+			HealthBarWidget = CreateWidget<UCWorldWidget>(GetWorld(), HealthBarWidgetClass);
+			if (HealthBarWidget)
+			{
+				HealthBarWidget->AttachToActor = this;
+				HealthBarWidget->AddToViewport();
+			}
 		}
 	}
 }
