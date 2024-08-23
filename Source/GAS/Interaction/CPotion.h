@@ -13,11 +13,12 @@ class GAS_API ACPotion : public ACPickupBase
 
 public:
 	ACPotion();
-
+	
 public:
-	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
+	void Interact_Implementation(APawn* InstigatorPawn) override;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Component")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* MeshComp;
+
 };

@@ -56,5 +56,4 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UAudioComponent* AudioComp;
-
 };

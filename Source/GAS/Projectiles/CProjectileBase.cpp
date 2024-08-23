@@ -1,11 +1,11 @@
 #include "CProjectileBase.h"
 #include "Components/SphereComponent.h"
 #include "Components/AudioComponent.h"
-#include "Sound/SoundCue.h"
-#include "Camera/CameraShake.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+#include "Camera/CameraShake.h"
 
 ACProjectileBase::ACProjectileBase()
 {
@@ -46,8 +46,11 @@ void ACProjectileBase::Explode_Implementation()
 	if (!IsPendingKill())
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 		UGameplayStatics::PlayWorldCameraShake(this, ImpactShake, GetActorLocation(), ImpactShakeInnerRadius, ImpactShakeOuterRadius);
+
+
 		Destroy();
 	}
 }

@@ -28,8 +28,9 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USphereComponent* SphereComp;
+
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 	float RespawnTime;
 
-	FTimerHandle TimerHandle_Respawn;
+	FTimerHandle TimerHandle_RespawnTimer;
 };

@@ -26,6 +26,11 @@ ACPlayer::ACPlayer()
 	TimeToHitParamName = "TimeToHit";
 }
 
+void ACPlayer::HealSelf(float Amount)
+{
+	AttributeComp->ApplyHealthChange(this, Amount);
+}
+
 void ACPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -129,7 +134,7 @@ void ACPlayer::PlayAttackAction()
 
 	if (MuzzleParticle)
 	{
-		UGameplayStatics::SpawnEmitterAttached(MuzzleParticle, GetMesh(), HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset);
+		UGameplayStatics::SpawnEmitterAttached(MuzzleParticle, GetMesh(), HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 	}
 }
 
