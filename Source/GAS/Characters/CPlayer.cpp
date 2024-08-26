@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/CInteractionComponent.h"
 #include "Components/CAttributeComponent.h"
+#include "Components/CActionComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -17,6 +18,7 @@ ACPlayer::ACPlayer()
 
 	InteractionComp = CreateDefaultSubobject<UCInteractionComponent>("InteractionComp");
 	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>("AttributeComp");
+	ActionComp = CreateDefaultSubobject<UCActionComponent>("ActionComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
@@ -55,6 +57,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("SecondaryAction", EInputEvent::IE_Pressed, this, &ACPlayer::SecondaryAction);
 	PlayerInputComponent->BindAction("ThirdAction", EInputEvent::IE_Pressed, this, &ACPlayer::ThirdAction);
 	PlayerInputComponent->BindAction("PrimaryInteraction", EInputEvent::IE_Pressed, this, &ACPlayer::PrimaryInteraction);
+
+	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &ACPlayer::StartSprint);
+	PlayerInputComponent->BindAction("Sprint", EInputEvent::IE_Released, this, &ACPlayer::StopSprint);
 }
 
 FVector ACPlayer::GetPawnViewLocation() const
@@ -185,5 +190,15 @@ void ACPlayer::PrimaryInteraction()
 	{
 		InteractionComp->PrimaryInteraction();
 	}
+}
+
+void ACPlayer::StartSprint()
+{
+	ActionComp->StartActionByName(this, "Sprint");
+}
+
+void ACPlayer::StopSprint()
+{
+	ActionComp->StopActionByName(this, "Sprint");
 }
 

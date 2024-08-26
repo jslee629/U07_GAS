@@ -10,6 +10,7 @@ class UCInteractionComponent;
 class UAnimMontage;
 class UCAttributeComponent;
 class UParticleSystem;
+class UCActionComponent;
 
 UCLASS()
 class GAS_API ACPlayer : public ACharacter
@@ -49,6 +50,9 @@ protected:
 
 	void PrimaryInteraction();
 
+	void StartSprint();
+	void StopSprint();
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USpringArmComponent* SpringArmComp;
@@ -61,6 +65,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent* AttributeComp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UCActionComponent* ActionComp;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Action")
