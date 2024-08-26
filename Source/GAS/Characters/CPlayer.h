@@ -25,6 +25,7 @@ public:
 protected:
 	virtual void PostInitializeComponents() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual FVector GetPawnViewLocation() const override;
 
 protected:
 	UFUNCTION()

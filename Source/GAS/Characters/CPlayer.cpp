@@ -57,6 +57,11 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("PrimaryInteraction", EInputEvent::IE_Pressed, this, &ACPlayer::PrimaryInteraction);
 }
 
+FVector ACPlayer::GetPawnViewLocation() const
+{
+	return CameraComp->GetComponentLocation();
+}
+
 void ACPlayer::OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
 	if (Delta < 0.f)
