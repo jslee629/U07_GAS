@@ -26,7 +26,7 @@ public:
 	float MaxPitch;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* BaseMesh;
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")

@@ -37,16 +37,8 @@ protected:
 	void MoveRight(float Value);
 
 	void PrimaryAction();
-	void PrimaryAction_TimeElapsed();
-
 	void SecondaryAction();
-	void SecondaryAction_TimeElapsed();
-
 	void ThirdAction();
-	void ThirdAction_TimeElapsed();
-
-	void PlayAttackAction();
-	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 
 	void PrimaryInteraction();
 
@@ -71,32 +63,5 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Action")
-	float AttackDelay;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	TSubclassOf<AActor> MagicBallClass;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	TSubclassOf<AActor> WarpBallClass;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	TSubclassOf<AActor> BlackHoleClass;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	UAnimMontage* AttackMontage;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	UParticleSystem* MuzzleParticle;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
-	FName HandSocketName;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
 	FName TimeToHitParamName;
-
-private:
-	FTimerHandle TimerHandle_PrimaryAction;
-	FTimerHandle TimerHandle_SecondaryAction;
-	FTimerHandle TimerHandle_ThirdAction;
-
 };

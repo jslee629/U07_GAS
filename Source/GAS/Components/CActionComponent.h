@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameplayTagContainer.h"
 #include "CActionComponent.generated.h"
 
 class UCAction;
@@ -30,6 +31,13 @@ public:
 	bool StopActionByName(AActor* Instigator, FName ActionName);
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	TArray<TSubclassOf<UCAction>> DefaultActions;
+
 	UPROPERTY()
 	TArray<UCAction*> Actions;
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "GameplayTag")
+	FGameplayTagContainer ActiveGameplayTags;
 };
