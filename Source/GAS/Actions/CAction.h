@@ -15,10 +15,10 @@ class GAS_API UCAction : public UObject
 public:
 	UWorld* GetWorld() const override;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Action")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Action")
 	void StartAction(AActor* Instigator);
 
-	UFUNCTION(BlueprintNativeEvent, Category = "Action")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Action")
 	void StopAction(AActor* Instigator);
 
 	UFUNCTION(BlueprintNativeEvent, Category = "Action")

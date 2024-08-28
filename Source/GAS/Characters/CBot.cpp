@@ -7,12 +7,14 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/CAttributeComponent.h"
+#include "Components/CActionComponent.h"
 #include "UI/CWorldWidget.h"
 
 ACBot::ACBot()
 {
 	PawnSesningComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSesningComp");
 	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>("AttributeComp");
+	ActionComp = CreateDefaultSubobject<UCActionComponent>("ActionComp");
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 

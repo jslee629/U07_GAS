@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CProjectileBase.h"
+#include "GameplayTagContainer.h"
 #include "CMagicBall.generated.h"
 
 UCLASS()
@@ -23,4 +24,7 @@ protected:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	float DamageAmount;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	FGameplayTag ReflectTag;
 };

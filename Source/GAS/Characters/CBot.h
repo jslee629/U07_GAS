@@ -6,6 +6,7 @@
 
 class UPawnSensingComponent;
 class UCAttributeComponent;
+class UCActionComponent;
 class UCWorldWidget;
 
 UCLASS()
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent* AttributeComp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UCActionComponent* ActionComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Imapct")
 	FName TimeToHitParamName;

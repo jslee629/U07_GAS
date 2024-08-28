@@ -1,11 +1,16 @@
 #include "CPickupBase.h"
 #include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 ACPickupBase::ACPickupBase()
 {
 	SphereComp = CreateDefaultSubobject<USphereComponent>("SphereComp");
 	SphereComp->SetCollisionProfileName("Pickup");
 	RootComponent = SphereComp;
+
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
+	MeshComp->SetupAttachment(RootComponent);
+	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	RespawnTime = 10.f;
 }

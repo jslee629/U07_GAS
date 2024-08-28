@@ -1,5 +1,7 @@
 #include "CMagicBall.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/CActionComponent.h"
 #include "Game/CFunctionLibrary.h"
 
 ACMagicBall::ACMagicBall()
@@ -19,6 +21,14 @@ void ACMagicBall::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor && OtherActor != GetInstigator())
 	{
+		UCActionComponent* ActionComp = Cast<UCActionComponent>(OtherActor->GetComponentByClass(UCActionComponent::StaticClass()));
+		if (ActionComp && ActionComp->ActiveGameplayTags.HasTag(ReflectTag))
+		{
+			MoveComp->Velocity = -(MoveComp->Velocity);
+			SetInstigator(Cast<APawn>(OtherActor));
+			return;
+		}
+
 		if (UCFunctionLibrary::ApplyDirectionDamage(GetInstigator(), OtherActor, DamageAmount, SweepResult))
 		{
 			Explode();

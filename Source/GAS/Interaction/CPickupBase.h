@@ -6,8 +6,9 @@
 #include "CPickupBase.generated.h"
 
 class USphereComponent;
+class UStaticMeshComponent;
 
-UCLASS()
+UCLASS(Abstract)
 class GAS_API ACPickupBase : public AActor, public ICGameplayInterface
 {
 	GENERATED_BODY()
@@ -28,6 +29,9 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USphereComponent* SphereComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UStaticMeshComponent* MeshComp;
 
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 	float RespawnTime;
