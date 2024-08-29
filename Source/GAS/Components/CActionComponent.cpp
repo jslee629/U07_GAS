@@ -14,7 +14,7 @@ void UCActionComponent::BeginPlay()
 
 	for (TSubclassOf<UCAction> ActionClass : DefaultActions)
 	{
-		AddAction(ActionClass);
+		AddAction(GetOwner(), ActionClass);
 	}
 }
 
@@ -26,7 +26,7 @@ void UCActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::White, Message);
 }
 
-void UCActionComponent::AddAction(TSubclassOf<UCAction> ActionClass)
+void UCActionComponent::AddAction(AActor* Instigator, TSubclassOf<UCAction> ActionClass)
 {
 	if (!ensure(ActionClass))
 	{
@@ -37,6 +37,11 @@ void UCActionComponent::AddAction(TSubclassOf<UCAction> ActionClass)
 	if (ensure(NewAction))
 	{
 		Actions.Add(NewAction);
+
+		if (NewAction->bAutoStart && NewAction->CanStart(Instigator))
+		{
+			NewAction->StartAction(Instigator);
+		}
 	}
 }
 
@@ -76,5 +81,15 @@ bool UCActionComponent::StopActionByName(AActor* Instigator, FName ActionName)
 		}
 	}
 	return false;
+}
+
+void UCActionComponent::RemoveAction(UCAction* ActionToRemove)
+{
+	if (!ensure(ActionToRemove && !ActionToRemove->IsRunning()))
+	{
+		return;
+	}
+
+	Actions.Remove(ActionToRemove);
 }
 

@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	FName ActionName;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
+	bool bAutoStart;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayTag")
 	FGameplayTagContainer GrantTags;
