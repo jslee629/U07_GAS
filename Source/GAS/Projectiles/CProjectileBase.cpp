@@ -50,7 +50,6 @@ void ACProjectileBase::Explode_Implementation()
 		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 		UGameplayStatics::PlayWorldCameraShake(this, ImpactShake, GetActorLocation(), ImpactShakeInnerRadius, ImpactShakeOuterRadius);
 
-
 		Destroy();
 	}
 }

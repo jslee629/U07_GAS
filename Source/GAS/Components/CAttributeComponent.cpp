@@ -1,4 +1,5 @@
 #include "CAttributeComponent.h"
+#include "CActionComponent.h"
 #include "Game/CGameMode.h"
 
 static TAutoConsoleVariable<float> CVarDamageMultiply(TEXT("Tore.DamageMultiply"), 1.f, TEXT("Modify damage multiply"), ECVF_Cheat);
@@ -7,13 +8,14 @@ UCAttributeComponent::UCAttributeComponent()
 {
 	MaxHealth = 100.f;
 	Health = MaxHealth;
+	MaxRage= 100.f;
+	Rage = 0.f;
+	RageIncreaseRate = 5.f;
 }
 
 void UCAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 UCAttributeComponent* UCAttributeComponent::GetAttributes(AActor* FromActor)
@@ -48,6 +50,8 @@ bool UCAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	{
 		float DamageMultiply = CVarDamageMultiply.GetValueOnGameThread();
 		Delta *= DamageMultiply;
+
+		ApplyRageChange(InstigatorActor, RageIncreaseRate);
 	}
 
 	float PrevHealth = Health;
@@ -90,6 +94,26 @@ float UCAttributeComponent::GetMaxHealth() const
 float UCAttributeComponent::GetHealth() const
 {
 	return Health;
+}
+
+float UCAttributeComponent::GetMaxRage() const
+{
+	return MaxRage;
+}
+
+float UCAttributeComponent::GetRage() const
+{
+	return Rage;
+}
+
+void UCAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
+{
+	Rage = FMath::Clamp(Rage += Delta, 0.f, MaxRage);
+
+	if (OnRageChanged.IsBound())
+	{
+		OnRageChanged.Broadcast(InstigatorActor, this, Rage, Delta);
+	}
 }
 
 bool UCAttributeComponent::Kill(AActor* InstigatorActor)
