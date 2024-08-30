@@ -1,5 +1,6 @@
 #include "CChest.h"
 #include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 
 ACChest::ACChest()
 {
@@ -10,6 +11,8 @@ ACChest::ACChest()
 	LidMesh->SetupAttachment(BaseMesh);
 
 	MaxPitch = 110.f;
+
+	SetReplicates(true);
 }
 
 void ACChest::BeginPlay()
@@ -20,5 +23,18 @@ void ACChest::BeginPlay()
 
 void ACChest::Interact_Implementation(APawn* InstigatorPawn)
 {
+	bLidOpen = !bLidOpen;
+}
+
+void ACChest::OnRep_LidOpen()
+{
+	//TODO: toggle
 	LidMesh->SetRelativeRotation(FRotator(MaxPitch, 0, 0));
+}
+
+void ACChest::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACChest, bLidOpen);
 }

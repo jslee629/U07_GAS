@@ -24,7 +24,11 @@ void UCInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FindNearestInteractable();
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn->IsLocallyControlled())
+	{
+		FindNearestInteractable();
+	}
 }
 
 void UCInteractionComponent::FindNearestInteractable()
@@ -57,7 +61,7 @@ void UCInteractionComponent::FindNearestInteractable()
 	{
 		if (bDrawDebug)
 		{
-			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 20, LineColor, false, 3.f);
+			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 20, LineColor, false, 0.f);
 		}
 
 		AActor* HitActor = Hit.GetActor();
@@ -90,21 +94,33 @@ void UCInteractionComponent::FindNearestInteractable()
 			}
 		}
 	}
+	else
+	{
+		if (DefaultWidgetInstance)
+		{
+			DefaultWidgetInstance->RemoveFromParent();
+		}
+	}
 
 	if (bDrawDebug)
 	{
-		DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 2.f, 0, 2.f);
+		DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 0.f, 0, 2.f);
 	}
 }
 
 void UCInteractionComponent::PrimaryInteraction()
 {
-	if (FocusedActor == nullptr)
+	ServerInteract(FocusedActor);
+}
+
+void UCInteractionComponent::ServerInteract_Implementation(AActor* InFocused)
+{
+	if (InFocused == nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Orange, "There is no interactable object");
 		return;
 	}
 
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	ICGameplayInterface::Execute_Interact(FocusedActor, OwnerPawn);
+	ICGameplayInterface::Execute_Interact(InFocused, OwnerPawn);
 }

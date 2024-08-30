@@ -27,6 +27,10 @@ public:
 	void PrimaryInteraction();
 
 protected:
+	UFUNCTION(Reliable, Server, Category = "ServerRPC")
+	void ServerInteract(AActor* InFocused);
+
+protected:
 	UPROPERTY()
 	AActor* FocusedActor;
 
