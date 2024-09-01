@@ -8,6 +8,7 @@ class UPawnSensingComponent;
 class UCAttributeComponent;
 class UCActionComponent;
 class UCWorldWidget;
+class USoundCue;
 
 UCLASS()
 class GAS_API ACBot : public ACharacter
@@ -39,6 +40,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
 	UCActionComponent* ActionComp;
 
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly, Category = "Components")
+	UAudioComponent* AudioComp;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Imapct")
 	FName TimeToHitParamName;
 
@@ -46,4 +50,12 @@ protected:
 	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 
 	UCWorldWidget* HealthBarWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> SeePawnWidgetClass;
+
+	UCWorldWidget* SeePawnWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	USoundCue* SeePawnSound;
 };

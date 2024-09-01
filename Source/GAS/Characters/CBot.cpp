@@ -5,7 +5,9 @@
 #include "BrainComponent.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Sound/SoundCue.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/CActionComponent.h"
 #include "UI/CWorldWidget.h"
@@ -15,6 +17,7 @@ ACBot::ACBot()
 	PawnSesningComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSesningComp");
 	AttributeComp = CreateDefaultSubobject<UCAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UCActionComponent>("ActionComp");
+	AudioComp = CreateDefaultSubobject<UAudioComponent>("AudioComp");
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
@@ -39,7 +42,22 @@ void ACBot::OnSeePawn(APawn* Pawn)
 	{
 		SetTargetActor(Pawn);
 
-		DrawDebugString(GetWorld(), GetActorLocation(), "I found you!!", nullptr, FColor::White, 3.f, true);
+		if (SeePawnWidget == nullptr)
+		{
+			SeePawnWidget = CreateWidget<UCWorldWidget>(GetWorld(), SeePawnWidgetClass);
+			SeePawnWidget->AttachToActor = this;
+			SeePawnWidget->AddToViewport();
+		}
+		else if (SeePawnWidget)
+		{
+			SeePawnWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+
+		if (SeePawnSound)
+		{
+			AudioComp->SetSound(SeePawnSound);
+			AudioComp->Play();
+		}
 	}
 }
 
