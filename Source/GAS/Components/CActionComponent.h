@@ -34,6 +34,10 @@ public:
 	void RemoveAction(UCAction* ActionToRemove);
 
 protected:
+	UFUNCTION(Reliable, Server)
+	void ServerStartAction(AActor* Instigator, FName ActionName);
+
+protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	TArray<TSubclassOf<UCAction>> DefaultActions;
 

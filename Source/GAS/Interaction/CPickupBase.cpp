@@ -13,6 +13,8 @@ ACPickupBase::ACPickupBase()
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	RespawnTime = 10.f;
+
+	SetReplicates(true);
 }
 
 void ACPickupBase::Interact_Implementation(APawn* InstigatorPawn)
