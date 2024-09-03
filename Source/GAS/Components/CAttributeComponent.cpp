@@ -54,21 +54,25 @@ bool UCAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	}
 
 	float PrevHealth = Health;
-	Health = FMath::Clamp(Health += Delta, 0.f, MaxHealth);
+	float NewHealth = FMath::Clamp(Health + Delta, 0.f, MaxHealth);
+	float ActualDelta = NewHealth - PrevHealth;
 
-	float ActualDelta = Health - PrevHealth;
-
-	if (!FMath::IsNearlyZero(ActualDelta))
+	if (GetOwner()->HasAuthority())
 	{
-		NetMulticastHealthChange(InstigatorActor, Health, ActualDelta);
-	}
+		Health = NewHealth;
 
-	if (ActualDelta < 0.f && Health <= 0.f)
-	{
-		ACGameMode* GM = GetWorld()->GetAuthGameMode<ACGameMode>();
-		if (GM)
+		if (!FMath::IsNearlyZero(ActualDelta))
 		{
-			GM->OnActorKilled(GetOwner(), InstigatorActor);
+			NetMulticastHealthChange(InstigatorActor, Health, ActualDelta);
+		}
+
+		if (ActualDelta < 0.f && Health <= 0.f)
+		{
+			ACGameMode* GM = GetWorld()->GetAuthGameMode<ACGameMode>();
+			if (GM)
+			{
+				GM->OnActorKilled(GetOwner(), InstigatorActor);
+			}
 		}
 	}
 

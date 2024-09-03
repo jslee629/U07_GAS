@@ -7,6 +7,19 @@
 
 class UCActionComponent;
 
+USTRUCT()
+struct FActionRepData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY()
+	bool bIsRunning;
+
+	UPROPERTY()
+	AActor* Instigator;
+};
+
 UCLASS(Blueprintable)
 class GAS_API UCAction : public UObject
 {
@@ -14,6 +27,7 @@ class GAS_API UCAction : public UObject
 	
 public:
 	UWorld* GetWorld() const override;
+	FORCEINLINE virtual bool IsSupportedForNetworking() const override { return true; }
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Action")
 	void StartAction(AActor* Instigator);
@@ -26,6 +40,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	bool IsRunning() const;
+
+	void SetOwningComponent(UCActionComponent* NewActionComp);
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Action")
@@ -45,5 +61,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayTag")
 	FGameplayTagContainer BlockedTags;
 
-	bool bIsRunning;
+	UPROPERTY(ReplicatedUsing = "OnRep_RepData")
+	FActionRepData RepData;
+
+	UFUNCTION()
+	void OnRep_RepData();
+
+	UPROPERTY(Replicated)
+	UCActionComponent* ActionComp;
+
+
 };

@@ -34,7 +34,7 @@ void ACMagicBall::OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		{
 			Explode();
 
-			if (ActionComp && BurningActionClass)
+			if (ActionComp && BurningActionClass && HasAuthority())
 			{
 				ActionComp->AddAction(GetInstigator(), BurningActionClass);
 			}
