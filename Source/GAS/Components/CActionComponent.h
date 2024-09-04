@@ -34,9 +34,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void RemoveAction(UCAction* ActionToRemove);
 
+	UCAction* GetAction(TSubclassOf<UCAction> ActionClass) const;
+
 protected:
 	UFUNCTION(Reliable, Server)
 	void ServerStartAction(AActor* Instigator, FName ActionName);
+
+	UFUNCTION(Reliable, Server)
+	void ServerStopAction(AActor* Instigator, FName ActionName);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Action")

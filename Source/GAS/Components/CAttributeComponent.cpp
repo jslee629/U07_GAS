@@ -8,6 +8,8 @@ UCAttributeComponent::UCAttributeComponent()
 {
 	MaxHealth = 100.f;
 	Health = MaxHealth;
+	MaxRage= 100.f;
+	Rage = 0.f;
 
 	SetIsReplicatedByDefault(true);
 }
@@ -79,6 +81,21 @@ bool UCAttributeComponent::ApplyHealthChange(AActor* InstigatorActor, float Delt
 	return !FMath::IsNearlyZero(ActualDelta);
 }
 
+bool UCAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
+{
+	float PrevRage = Rage;
+	Rage = FMath::Clamp(Rage + Delta, 0.f, MaxRage);
+
+	float ActualDelta = Rage - PrevRage;
+
+	if (!FMath::IsNearlyZero(ActualDelta))
+	{
+		OnRageChanged.Broadcast(InstigatorActor, this, Rage, ActualDelta);
+	}
+
+	return !FMath::IsNearlyZero(ActualDelta);
+}
+
 void UCAttributeComponent::NetMulticastHealthChange_Implementation(AActor* InstigatorActor, float NewHealth, float Delta)
 {
 	OnHealthChanged.Broadcast(InstigatorActor, this, NewHealth, Delta);
@@ -104,6 +121,16 @@ float UCAttributeComponent::GetHealth() const
 	return Health;
 }
 
+float UCAttributeComponent::GetMaxRage() const
+{
+	return MaxRage;
+}
+
+float UCAttributeComponent::GetRage() const
+{
+	return Rage;
+}
+
 bool UCAttributeComponent::Kill(AActor* InstigatorActor)
 {
 	return ApplyHealthChange(InstigatorActor, -GetMaxHealth());
@@ -115,4 +142,6 @@ void UCAttributeComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(UCAttributeComponent, Health);
 	DOREPLIFETIME(UCAttributeComponent, MaxHealth);
+	DOREPLIFETIME(UCAttributeComponent, Rage);
+	DOREPLIFETIME(UCAttributeComponent, MaxRage);
 }

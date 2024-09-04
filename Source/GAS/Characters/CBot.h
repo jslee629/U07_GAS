@@ -27,7 +27,12 @@ private:
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* OwningComp, float NewHealth, float Delta);
 
+	UFUNCTION(BlueprintCallable, Category = "AI")
 	void SetTargetActor(AActor* NewTarget);
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	AActor* GetTargetActor() const;
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -46,4 +51,10 @@ protected:
 	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 
 	UCWorldWidget* HealthBarWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> SpottedWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	FName TargetActorKeyName;
 };

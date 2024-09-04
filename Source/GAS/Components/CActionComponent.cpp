@@ -111,15 +111,19 @@ bool UCActionComponent::StopActionByName(AActor* Instigator, FName ActionName)
 	{
 		if (Action && Action->ActionName == ActionName)
 		{
-			if (!Action->IsRunning())
+			if (Action->IsRunning())
 			{
-				continue;
-			}
+				if (!GetOwner()->HasAuthority())
+				{
+					ServerStopAction(Instigator, ActionName);
+				}
 
-			Action->StopAction(Instigator);
-			return true;
+				Action->StopAction(Instigator);
+				return true;
+			}
 		}
 	}
+
 	return false;
 }
 
@@ -131,6 +135,18 @@ void UCActionComponent::RemoveAction(UCAction* ActionToRemove)
 	}
 
 	Actions.Remove(ActionToRemove);
+}
+
+UCAction* UCActionComponent::GetAction(TSubclassOf<UCAction> ActionClass) const
+{
+	//TODO: 해당 엑션 찾아서 리턴
+	
+	return nullptr;
+}
+
+void UCActionComponent::ServerStopAction_Implementation(AActor* Instigator, FName ActionName)
+{
+	StopActionByName(Instigator, ActionName);
 }
 
 void UCActionComponent::ServerStartAction_Implementation(AActor* Instigator, FName ActionName)
