@@ -6,6 +6,7 @@
 #include "CGameMode.generated.h"
 
 class UEnvQuery;
+class UCSaveGame;
 
 UCLASS()
 class GAS_API ACGameMode : public AGameModeBase
@@ -16,7 +17,9 @@ public:
 	ACGameMode();
 
 protected:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	virtual void StartPlay() override;
+	void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 
 	//Kill
 public:
@@ -70,4 +73,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Pickup")
 	int32 MaxPickupCount;
+
+	//Save Game
+protected:
+	UPROPERTY()
+	UCSaveGame* CurrentSaveGame;
+
+	FString SlotName;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void WriteSaveGame();
+
+	void LoadSaveGame();
 };

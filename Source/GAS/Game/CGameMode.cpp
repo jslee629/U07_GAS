@@ -2,10 +2,14 @@
 #include "EnvironmentQuery/EnvQueryManager.h"
 #include "EngineUtils.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/GameStateBase.h"
 #include "Characters/CBot.h"
 #include "Characters/CPlayer.h"
 #include "Components/CAttributeComponent.h"
 #include "CPlayerState.h"
+#include "CSaveGame.h"
+#include "CGameplayInterface.h"
 
 static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("Tore.SpawnBots"), false, TEXT("Enable to Spawn Bots via cvar"), ECVF_Cheat);
 
@@ -17,7 +21,16 @@ ACGameMode::ACGameMode()
 	MinimumPickupDistance = 2000.f;
 	MaxPickupCount = 10;
 
+	SlotName = "Game01";
+
 	PlayerStateClass = ACPlayerState::StaticClass();
+}
+
+void ACGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	LoadSaveGame();
 }
 
 void ACGameMode::StartPlay()
@@ -33,6 +46,17 @@ void ACGameMode::StartPlay()
 		{
 			QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &ACGameMode::OnSpawnPickupQueryFinished);
 		}
+	}
+}
+
+void ACGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+
+	ACPlayerState* PS = NewPlayer->GetPlayerState<ACPlayerState>();
+	if (PS)
+	{
+		PS->LoadPlayerState(CurrentSaveGame);
 	}
 }
 
@@ -143,6 +167,55 @@ void ACGameMode::OnSpawnPickupQueryFinished(UEnvQueryInstanceBlueprintWrapper* Q
 
 		UsedLocations.Add(SelectedLocation);
 		SpawnCount++;
+	}
+}
+
+void ACGameMode::WriteSaveGame()
+{
+	for (int32 i = 0; i < GameState->PlayerArray.Num(); i++)
+	{
+		//Credit
+		ACPlayerState* PS = Cast<ACPlayerState>(GameState->PlayerArray[i]);
+		if (PS)
+		{
+			PS->SavePlayerState(CurrentSaveGame);
+			break;
+		}
+
+		//Actor
+		for (FActorIterator It(GetWorld()); It; ++It)
+		{
+			AActor* Actor = *It;
+			if (!Actor->Implements<UCGameplayInterface>())
+			{
+				continue;
+			}
+
+			//TODO: 인터페이스 상속 받은 놈만 저장
+		}
+	}
+
+	UGameplayStatics::SaveGameToSlot(CurrentSaveGame, SlotName, 0);
+}
+
+void ACGameMode::LoadSaveGame()
+{
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+	{
+		CurrentSaveGame = Cast<UCSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+
+		if (CurrentSaveGame == nullptr)
+		{
+			UE_LOG(LogTemp, Log, TEXT("Failed to load SaveGame Data"));
+			return;
+		}
+
+		UE_LOG(LogTemp, Log, TEXT("Loaded SaveGame Data"));
+	}
+	else
+	{
+		CurrentSaveGame = Cast<UCSaveGame>(UGameplayStatics::CreateSaveGameObject(UCSaveGame::StaticClass()));
+		UE_LOG(LogTemp, Log, TEXT("Create new SaveGame Data."));
 	}
 }
 

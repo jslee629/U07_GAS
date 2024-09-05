@@ -139,8 +139,14 @@ void UCActionComponent::RemoveAction(UCAction* ActionToRemove)
 
 UCAction* UCActionComponent::GetAction(TSubclassOf<UCAction> ActionClass) const
 {
-	//TODO: 해당 엑션 찾아서 리턴
-	
+	for (UCAction* Action : Actions)
+	{
+		if (Action && Action->IsA(ActionClass))
+		{
+			return Action;
+		}
+	}
+
 	return nullptr;
 }
 
