@@ -37,4 +37,10 @@ protected:
 	float RespawnTime;
 
 	FTimerHandle TimerHandle_RespawnTimer;
+
+	UPROPERTY(ReplicatedUsing = "OnRep_IsActive")
+	bool bIsActive;
+
+	UFUNCTION()
+	void OnRep_IsActive();
 };

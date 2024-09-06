@@ -6,3 +6,10 @@ void ACPlayerController::SetPawn(APawn* InPawn)
 	
 	OnPawnChanged.Broadcast(InPawn);
 }
+
+void ACPlayerController::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	OnPlayerStateChanged.Broadcast(PlayerState);
+}

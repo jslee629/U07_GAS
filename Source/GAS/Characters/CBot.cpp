@@ -42,13 +42,18 @@ void ACBot::OnSeePawn(APawn* Pawn)
 		{
 			SetTargetActor(Pawn);
 
-			UCWorldWidget* SpottedWidget = CreateWidget<UCWorldWidget>(GetWorld(), SpottedWidgetClass);
-			if (SpottedWidget)
-			{
-				SpottedWidget->AttachToActor = this;
-				SpottedWidget->AddToViewport(10);
-			}
+			NetMulticastPawnSeen();
 		}
+	}
+}
+
+void ACBot::NetMulticastPawnSeen_Implementation()
+{
+	UCWorldWidget* SpottedWidget = CreateWidget<UCWorldWidget>(GetWorld(), SpottedWidgetClass);
+	if (SpottedWidget)
+	{
+		SpottedWidget->AttachToActor = this;
+		SpottedWidget->AddToViewport(10);
 	}
 }
 

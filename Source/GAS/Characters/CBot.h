@@ -24,6 +24,9 @@ private:
 	UFUNCTION()
 	void OnSeePawn(APawn* Pawn);
 
+	UFUNCTION(NetMulticast, Unreliable)
+	void NetMulticastPawnSeen();
+
 	UFUNCTION()
 	void OnHealthChanged(AActor* InstigatorActor, UCAttributeComponent* OwningComp, float NewHealth, float Delta);
 

@@ -29,13 +29,13 @@ void UCActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	for (UCAction* Action : Actions)
-	{
-		FColor TextColor = Action->IsRunning() ? FColor::Blue : FColor::White;
-		FString ActionMessage = FString::Printf(TEXT("[%s] Action : %s"), *GetNameSafe(GetOwner()), *GetNameSafe(Action));
+	//for (UCAction* Action : Actions)
+	//{
+	//	FColor TextColor = Action->IsRunning() ? FColor::Blue : FColor::White;
+	//	FString ActionMessage = FString::Printf(TEXT("[%s] Action : %s"), *GetNameSafe(GetOwner()), *GetNameSafe(Action));
 
-		LogOnScreen(this, ActionMessage, TextColor, 0.f);
-	}
+	//	LogOnScreen(this, ActionMessage, TextColor, 0.f);
+	//}
 }
 
 bool UCActionComponent::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)

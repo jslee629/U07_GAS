@@ -4,6 +4,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameStateBase.h"
+#include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "Characters/CBot.h"
 #include "Characters/CPlayer.h"
 #include "Components/CAttributeComponent.h"
@@ -172,27 +173,38 @@ void ACGameMode::OnSpawnPickupQueryFinished(UEnvQueryInstanceBlueprintWrapper* Q
 
 void ACGameMode::WriteSaveGame()
 {
+	//Credit
 	for (int32 i = 0; i < GameState->PlayerArray.Num(); i++)
 	{
-		//Credit
 		ACPlayerState* PS = Cast<ACPlayerState>(GameState->PlayerArray[i]);
 		if (PS)
 		{
 			PS->SavePlayerState(CurrentSaveGame);
 			break;
 		}
+	}
 
-		//Actor
-		for (FActorIterator It(GetWorld()); It; ++It)
+	//Actor
+	CurrentSaveGame->SavedActors.Empty();
+
+	for (FActorIterator It(GetWorld()); It; ++It)
+	{
+		AActor* Actor = *It;
+		if (!Actor->Implements<UCGameplayInterface>())
 		{
-			AActor* Actor = *It;
-			if (!Actor->Implements<UCGameplayInterface>())
-			{
-				continue;
-			}
-
-			//TODO: 인터페이스 상속 받은 놈만 저장
+			continue;
 		}
+
+		FActorSaveData ActorData;
+		ActorData.ActorName = Actor->GetName();
+		ActorData.Transform = Actor->GetTransform();
+
+		FMemoryWriter MemWriter(ActorData.ByteData);
+		FObjectAndNameAsStringProxyArchive Desc(MemWriter, true);
+		Desc.ArIsSaveGame = true;
+		Actor->Serialize(Desc);
+
+		CurrentSaveGame->SavedActors.Add(ActorData);
 	}
 
 	UGameplayStatics::SaveGameToSlot(CurrentSaveGame, SlotName, 0);
@@ -211,6 +223,32 @@ void ACGameMode::LoadSaveGame()
 		}
 
 		UE_LOG(LogTemp, Log, TEXT("Loaded SaveGame Data"));
+
+		for (FActorIterator It(GetWorld()); It; ++It)
+		{
+			AActor* Actor = *It;
+			if (!Actor->Implements<UCGameplayInterface>())
+			{
+				continue;
+			}
+
+			for (FActorSaveData ActorData : CurrentSaveGame->SavedActors)
+			{
+				if (ActorData.ActorName == Actor->GetName())
+				{
+					Actor->SetActorTransform(ActorData.Transform);
+
+					FMemoryReader MemReader(ActorData.ByteData);
+					FObjectAndNameAsStringProxyArchive Desc(MemReader, true);
+					Desc.ArIsSaveGame = true;
+					Actor->Serialize(Desc);
+
+					ICGameplayInterface::Execute_OnActorLoaded(Actor);
+
+					break;
+				}
+			}
+		}
 	}
 	else
 	{

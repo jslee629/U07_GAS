@@ -90,7 +90,7 @@ bool UCAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
 
 	if (!FMath::IsNearlyZero(ActualDelta))
 	{
-		OnRageChanged.Broadcast(InstigatorActor, this, Rage, ActualDelta);
+		NetMulticastRageChange(InstigatorActor, Rage, ActualDelta);
 	}
 
 	return !FMath::IsNearlyZero(ActualDelta);
@@ -99,6 +99,11 @@ bool UCAttributeComponent::ApplyRageChange(AActor* InstigatorActor, float Delta)
 void UCAttributeComponent::NetMulticastHealthChange_Implementation(AActor* InstigatorActor, float NewHealth, float Delta)
 {
 	OnHealthChanged.Broadcast(InstigatorActor, this, NewHealth, Delta);
+}
+
+void UCAttributeComponent::NetMulticastRageChange_Implementation(AActor* InstigatorActor, float NewRage, float Delta)
+{
+	OnRageChanged.Broadcast(InstigatorActor, this, NewRage, Delta);
 }
 
 bool UCAttributeComponent::IsAlive() const

@@ -27,6 +27,11 @@ void ACChest::Interact_Implementation(APawn* InstigatorPawn)
 	OnRep_LidOpen();
 }
 
+void ACChest::OnActorLoaded_Implementation()
+{
+	OnRep_LidOpen();
+}
+
 void ACChest::OnRep_LidOpen()
 {
 	float CurrentPitch = bLidOpen ? MaxPitch : 0.f;
