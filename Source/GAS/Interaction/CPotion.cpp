@@ -25,3 +25,18 @@ void ACPotion::Interact_Implementation(APawn* InstigatorPawn)
 	}
 
 }
+
+#define LOCTEXT_NAMESPACE "InteractionMessage"
+
+FText ACPotion::GetInteractText_Implementation(APawn* InstigatorPawn)
+{
+	UCAttributeComponent* AttributeComp = UCAttributeComponent::GetAttributes(InstigatorPawn);
+	if (AttributeComp && AttributeComp->IsFullHealth())
+	{
+		return LOCTEXT("Potion_FullHealhWarning", "Health is already full");
+	}
+
+	return FText::Format(LOCTEXT("Potion_InteractionMessage", "Cost {0} Credits to Restore health"), CreditCost);
+}
+
+#undef LOCTEXT_NAMESPACE

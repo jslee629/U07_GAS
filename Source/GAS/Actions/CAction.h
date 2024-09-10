@@ -55,12 +55,14 @@ public:
 	bool bAutoStart;
 
 protected:
+	//GameplayTags
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayTag")
 	FGameplayTagContainer GrantTags;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayTag")
 	FGameplayTagContainer BlockedTags;
 
+	//Replicate
 	UPROPERTY(ReplicatedUsing = "OnRep_RepData")
 	FActionRepData RepData;
 
@@ -70,5 +72,10 @@ protected:
 	UPROPERTY(Replicated)
 	UCActionComponent* ActionComp;
 
+	UPROPERTY(Replicated)
+	float TimeStarted;
 
+	//Icon
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "UI")
+	UTexture2D* Icon;
 };

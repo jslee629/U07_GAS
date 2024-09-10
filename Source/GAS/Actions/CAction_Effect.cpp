@@ -1,5 +1,6 @@
 #include "CAction_Effect.h"
 #include "Components/CActionComponent.h"
+#include "GameFramework/GameState.h"
 
 UCAction_Effect::UCAction_Effect()
 {
@@ -45,6 +46,19 @@ void UCAction_Effect::StopAction_Implementation(AActor* Instigator)
 	{
 		Comp->RemoveAction(this);
 	}
+}
+
+float UCAction_Effect::GetRemainTime() const
+{
+	float EndTime = TimeStarted + Duration;
+
+	AGameStateBase* GS = GetWorld()->GetGameState<AGameStateBase>();
+	if (GS)
+	{
+		return EndTime - GS->GetServerWorldTimeSeconds();
+	}
+
+	return Duration;
 }
 
 void UCAction_Effect::ExecutePeriodEffect_Implementation(AActor* Instigator)
