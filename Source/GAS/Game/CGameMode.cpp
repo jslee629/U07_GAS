@@ -11,6 +11,7 @@
 #include "CPlayerState.h"
 #include "CSaveGame.h"
 #include "CGameplayInterface.h"
+#include "CSpawnBotDataAsset.h"
 
 static TAutoConsoleVariable<bool> CVarSpawnBots(TEXT("Tore.SpawnBots"), false, TEXT("Enable to Spawn Bots via cvar"), ECVF_Cheat);
 
@@ -112,15 +113,16 @@ void ACGameMode::OnSpawnBotQueryFinished(UEnvQueryInstanceBlueprintWrapper* Quer
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 	if (Locations.IsValidIndex(0))
 	{
-		if (!ensure(BotClass))
+		if (SpawnBotDataTable)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Bot Class Ref is not set"));
-			return;
+			TArray<FSpawnBotRow*> Rows;
+			SpawnBotDataTable->GetAllRows("", Rows);
+
+			int32 RandomIndex = FMath::RandRange(0, Rows.Num()-1);
+			FSpawnBotRow* SelectRow = Rows[RandomIndex];
+
+			GetWorld()->SpawnActor<AActor>(SelectRow->BotDataAsset->BotClass, Locations[0], FRotator::ZeroRotator);
 		}
-
-		GetWorld()->SpawnActor<AActor>(BotClass, Locations[0], FRotator::ZeroRotator);
-
-		DrawDebugSphere(GetWorld(), Locations[0], 50.f, 20, FColor::Blue, false, 60.f);
 	}
 }
 
