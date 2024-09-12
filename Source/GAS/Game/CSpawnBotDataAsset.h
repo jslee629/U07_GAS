@@ -14,6 +14,8 @@ class GAS_API UCSpawnBotDataAsset : public UPrimaryDataAsset
 public:
 	UCSpawnBotDataAsset();
 
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Spawn")
 	TSubclassOf<AActor> BotClass;

@@ -25,7 +25,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
-	UCSpawnBotDataAsset* BotDataAsset;
+	FPrimaryAssetId BotDataAssetID;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	float Weight;
@@ -85,6 +85,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UDataTable* SpawnBotDataTable;
+
+	void OnDataAssetLoaded(FPrimaryAssetId PrimaryAssetID, FTransform Transform);
 
 	//Spawn Pickup
 protected:
