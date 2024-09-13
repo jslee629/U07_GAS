@@ -35,6 +35,12 @@ void ACGameMode::InitGame(const FString& MapName, const FString& Options, FStrin
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 
+	FString ParsedValue = UGameplayStatics::ParseOption(Options, "savegame");
+	if (ParsedValue.Len() > 0)
+	{
+		SlotName = ParsedValue;
+	}
+
 	LoadSaveGame();
 }
 
@@ -127,7 +133,7 @@ void ACGameMode::OnSpawnBotQueryFinished(UEnvQueryInstanceBlueprintWrapper* Quer
 			UAssetManager* AssetManager = UAssetManager::GetIfValid();
 			if (AssetManager)
 			{
-				LogOnScreen(this, "Loading Spawn Bot Data Assets...", FColor::Yellow);
+				//LogOnScreen(this, "Loading Spawn Bot Data Assets...", FColor::Yellow);
 
 				FTransform Transform;
 				Transform.SetLocation(Locations[0]);
@@ -142,7 +148,7 @@ void ACGameMode::OnSpawnBotQueryFinished(UEnvQueryInstanceBlueprintWrapper* Quer
 
 void ACGameMode::OnDataAssetLoaded(FPrimaryAssetId PrimaryAssetID, FTransform Transform)
 {
-	LogOnScreen(this, PrimaryAssetID.PrimaryAssetName.ToString() + " is Loaded", FColor::Blue);
+	//LogOnScreen(this, PrimaryAssetID.PrimaryAssetName.ToString() + " is Loaded", FColor::Blue);
 
 	UAssetManager* AssetManager = UAssetManager::GetIfValid();
 	if (AssetManager)
@@ -150,7 +156,7 @@ void ACGameMode::OnDataAssetLoaded(FPrimaryAssetId PrimaryAssetID, FTransform Tr
 		UCSpawnBotDataAsset* DataAsset = Cast<UCSpawnBotDataAsset>(AssetManager->GetPrimaryAssetObject(PrimaryAssetID));
 		if (ensure(DataAsset))
 		{
-			LogOnScreen(this, "Get DataAsset Complete", FColor::Blue);
+			//LogOnScreen(this, "Get DataAsset Complete", FColor::Blue);
 
 			AActor* NewActor = GetWorld()->SpawnActorDeferred<AActor>(DataAsset->BotClass, Transform);
 

@@ -4,6 +4,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 
+DECLARE_CYCLE_STAT(TEXT("StartActionByName"), STAT_StartActionByName, STATGROUP_TORE);
+
 UCActionComponent::UCActionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -82,6 +84,8 @@ void UCActionComponent::AddAction(AActor* Instigator, TSubclassOf<UCAction> Acti
 
 bool UCActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 {
+	SCOPE_CYCLE_COUNTER(STAT_StartActionByName);
+
 	for (UCAction* Action : Actions)
 	{
 		if (Action && Action->ActionName == ActionName)
@@ -98,7 +102,14 @@ bool UCActionComponent::StartActionByName(AActor* Instigator, FName ActionName)
 				ServerStartAction(Instigator, ActionName);
 			}
 
-			Action->StartAction(Instigator);
+			TRACE_BOOKMARK(TEXT("StartAction::%s"), *GetNameSafe(Action));		//Add Insight Bookmark
+
+			{
+				Action->StartAction(Instigator);
+
+				SCOPED_NAMED_EVENT_FSTRING(Action->GetClass()->GetName(), FColor::White);
+			}
+
 			return true;
 		}
 	}

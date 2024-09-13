@@ -32,4 +32,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TSubclassOf<UCAction_Effect> BurningActionClass;
+
+
 };
